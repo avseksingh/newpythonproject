@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+<form method = "post">
+    {% csrf_token %}
+<table>
+    <tr><h1>Input Price Range</h1></tr>
+    <tr><td> from : <input type="number" name = "from" value= "{{from}}"></td></tr>
+    <tr><td> to : <input type="number" value="{{to}}" name = "to" ></td></tr>
+    <tr><td><input title="Press to search" type="submit" ></td></tr>
+</table>
+</form>
+<table border="2">
+   <tr><th>Book ID</th><th>Book Name</th><th>Book Code</th><th>Book Price</th></tr>
+    {% for book in books %}
+    <tr><td>{{book.id}}</td><td>{{book.bookname}}</td><td>{{book.subject}}</td> <td> {{book.price}}</td></tr>
+    {% endfor %}
+
+</table>
+{{name}}
+</body>
+</html>

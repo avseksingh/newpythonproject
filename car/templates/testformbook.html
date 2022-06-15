@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+
+<form method="post">
+    <h1>Default</h1>
+    {% csrf_token %}
+{{testform}}
+    <input type="submit" value="Go">
+</form>
+<form method="post">
+    <h1>Table</h1>
+    {% csrf_token %}
+{{ testform.as_table }}
+</form>
+<form method="post">
+    {% csrf_token %}
+    <h1>Paragraph</h1>
+{{ testform.as_p }}
+</form>
+<form method="post">
+    {% csrf_token %}
+    <h1>UL</h1>
+{{ testform.as_ul }}
+</form>
+
+
+</body>
+</html>

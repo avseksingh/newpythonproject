@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+</head>
+<body>
+<form method = "get">
+<table>
+    <tr><td>Input Book Name : <input type="text" name = "book" value= "{{book}}"></td></tr>
+    <tr><td><input title="Press to search" type="submit" ></td></tr>
+</table>
+</form>
+<table border="2">
+    {{data}}
+   <tr><th>Book ID</th><th>Book Name</th><th>Book Code</th><th>Book Price</th></tr>
+    {% for book in books %}
+    <tr><td>{{book.id}}</td><td>{{book.bookname}}</td><td>{{book.subject}}</td> <td> {{book.price}}</td></tr>
+    {% endfor %}
+
+</table>
+{{average.price__avg}}
+
+</body>
+</html>

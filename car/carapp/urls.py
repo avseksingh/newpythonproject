@@ -1,0 +1,30 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path ('', views.home, name = 'home'),
+    path('', views.index, name='index'),
+    #     path('allbooks', views.allbooks, name='all'),
+    path('searchbooks', views.searchbooks, name='search'),
+    path('or', views.searchor, name='searchor'),
+    path('avg', views.avg, name='avg'),
+    # path('form', views.showForm, name='form'),
+    # path('formone', views.showForm1, name='form1'),
+    # path('initial', views.showFormInitial, name='initial'),
+    path('all', views.all, name = 'filter'),
+    path('search', views.search, name = 'againsearch'),
+    path('searchbybook', views.searchbybook, name = 'Searchbybook'),
+    path('inputsearchbybook', views.inputsearchbybook, name = 'SearchbyInput'),
+    path('inputsearchbyprice', views.inputsearchbyprice, name = 'Inputsearchbyprice'),
+    path ('between', views.between , name = "Between"),
+    path ('allbooks', views.allbooks , name = "allbooks"),
+    path ('base', views.base , name = "base"),
+    path ('bootstrap', views.bootstrap , name = "bootstrap"),
+    path ('project', views.project1 , name = "project"),
+    path ('header', views.header , name = "header"),
+    path ('quiz', views.quizhome , name = "quiz"),
+    path ('quizpage', views.quizpage , name = "quizpage"),
+    path ('session', views.session, name = "session"),
+    path ('validation', views.validation, name = "validation"),
+    path ('result', views.result, name = "result"),
+]

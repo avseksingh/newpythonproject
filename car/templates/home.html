@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<h1>Links</h1>
+<table border = "2">
+    <tr><th>Name</th><th>Link</th></tr>
+    {% for link in links %}
+    <tr><td>title = "Visit {{link}} page">{{link}}</td><td><a target = "new page" title = "Visit {{link}}" href = "{% url link %}">{{link}}</a></td></tr>
+    {% endfor %}
+</table>
+</body>
+</html>
