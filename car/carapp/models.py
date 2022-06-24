@@ -75,3 +75,10 @@ class Question(models.Model):
                                                                                           self.answer)
 
 
+class Result(models.Model):
+    name = models.CharField(max_length = 200)
+    questionno = models.IntegerField()
+    question = models.CharField(max_length=500)
+    option = models.IntegerField()
+    answer = models.IntegerField()
+

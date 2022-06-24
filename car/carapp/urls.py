@@ -27,4 +27,5 @@ urlpatterns = [
     path ('session', views.session, name = "session"),
     path ('validation', views.validation, name = "validation"),
     path ('result', views.result, name = "result"),
+    path ('testresult', views.testresult, name = "testresult"),
 ]

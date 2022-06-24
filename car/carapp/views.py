@@ -6,7 +6,7 @@ from django.db.models.functions import Lower
 from django.forms.models import model_to_dict
 
 # from .forms import TestBookForm, TestBookFormOne
-from .models import BooksModel, TestBook, Question
+from .models import BooksModel, TestBook, Result, Question
 
 
 # Create your views here.
@@ -159,7 +159,6 @@ def header(request):
     return render(request, "header.html", {'name': 'shivam', "links": links})
 
 
-
 def session(request):
     submit = ""
     key = ""
@@ -203,6 +202,69 @@ def quizhome(request):
 userans = []
 userdata = {}
 
+
+# def quizpage(request):
+#     data = 0
+#     n = 1
+#     maxno = 1
+#     next = ""
+#     pre = ""
+#     queno = 1
+#     option = 1
+#     testover = ""
+#     value = ""
+#     f = 0
+#
+#     if request.GET:
+#         next = request.GET["next"]
+#         option = request.GET["option"]
+#         queno = int(request.GET["questionno"])
+#         testover = request.GET["testover"]
+#         userans.append(option)
+#     session = request.session
+#     if f > 0:
+#         queno = queno + 1
+#         maxno = Question.objects.all().aggregate(Max('questionno'))
+#         data = Question.objects.get(id=queno)
+#         qr = QuizResponse(queno, data.question, data.answer, option)
+#
+#
+#         r = Result()
+#         r.questionno = queno
+#         r.option = option
+#         r.question = data.question
+#         r.name = "candidatename"
+#         r.answer = data.answer
+#         r.save()
+#         value = Result.objects.all()
+#
+#     else:
+#         data = Question.objects.get(id=queno)
+#         qr = QuizResponse(queno, data.question, data.answer, option)
+#         f = f + 1
+#         print("else ")
+#         r = Result()
+#         r.questionno = queno
+#         r.option = option
+#         r.question = data.question
+#         r.name = "candidatename"
+#         r.answer = data.answer
+#         r.save()
+#         value = Result.objects.all()
+#
+#
+#
+#     if ((testover == "over") | (queno == 5)):
+#         return render(request, "result.html", {"value": value})
+#     else:
+#         return render(request, "quizpage.html",
+#                       {"data": data, "questionno": queno, "maxno": maxno, "option": option, "userans": userans,
+#                        "session": session})
+
+def result(request):
+    return render(request, "result.html", {"session": session})
+
+
 def quizpage(request):
     data = 0
     n = 1
@@ -212,31 +274,55 @@ def quizpage(request):
     queno = 1
     option = 1
     testover = ""
+    value = ""
+
 
     if request.GET:
         next = request.GET["next"]
         option = request.GET["option"]
-        queno = int(request.GET["questionno"]) + 1
+        queno = int(request.GET["questionno"])
         testover = request.GET["testover"]
         userans.append(option)
-    maxno = Question.objects.all().aggregate(Max('questionno'))
-    # data = Question.objects.get(questionno =
-
-    data = Question.objects.get(id=queno)
-    qr = QuizResponse(queno, data.question, data.answer, option)
     session = request.session
+    if next == "next":
+        queno = queno + 1
+        maxno = Question.objects.all().aggregate(Max('questionno'))
+        data = Question.objects.get(id=queno)
 
-    value = {"questionno": queno, "question": data.question, "correct": data.answer, "useranswer": option}
+        qr = QuizResponse(queno, data.question, data.answer, option)
 
-    session["response"] = value
 
-    if testover == "over":
-        return render(request, "result.html", {"session": session})
+        r = Result()
+        r.questionno = queno
+        r.option = option
+        r.question = data.question
+        r.name = "candidatename"
+        r.answer = data.answer
+        r.save()
+        value = Result.objects.all()
+
 
     else:
-        return render(request, "quizpage.html",
-                  {"data": data, "questionno": queno, "maxno": maxno, "option": option, "userans": userans,
-                   "session": session})
+        data = Question.objects.get(id=queno)
+        qr = QuizResponse(queno, data.question, data.answer, option)
+        print("else ")
+        r = Result()
+        r.questionno = queno
+        r.option = option
+        r.question = data.question
+        r.name = "candidatename"
+        r.answer = data.answer
+        r.save()
+        value = Result.objects.all()
 
-def result(request):
-    return render(request, "result.html", {"session": session})
+
+
+    if ((testover == "over") | (queno == 5)):
+        return render(request, "testresult.html", {"value": value})
+    else:
+        return render(request, "quizpage.html",
+                      {"data": data, "questionno": queno, "maxno": maxno, "option": option, "userans": userans,
+                       "session": session})
+
+def testresult(request):
+    return render(request, "testresult.html", {"session": session})
