@@ -42,6 +42,9 @@ urlpatterns = [
     path('sessionquiz', views.sessionquiz, name = "sessionquiz"),
     path('setsession', views.setsession, name = "setsession"),
     path('getsession', views.getsession, name = "getsession"),
-    path('removesession', views.removesession, name = "removesession")
+    path('removesession', views.removesession, name = "removesession"),
+    path('sessionset', views.sessionset, name = "sessionset"),
+    path('sessionremove', views.sessionremove, name = "sessionremove"),
+    path('sessionview', views.sessionview, name = "sessionview"),
 
 ]

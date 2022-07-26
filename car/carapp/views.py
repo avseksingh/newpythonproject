@@ -23,7 +23,31 @@ import requests
 
 # Create your views here.
 
+# <<<<---- Session Test Advance ------>>>>>
 
+def sessionset(request):
+    key = ""
+    value = ""
+    if request.POST:
+        key = request.POST["key"]
+        value = request.POST["value"]
+        request.session[key] = value
+    return render(request, "sessionset.html", {"key": key, "value": value})
+
+def sessionview(request):
+    request.session["score"] = 90
+    request.session["scor0e"] = 909
+    return render(request, "sessionview.html", {"session": request.session.items()})
+
+def sessionremove(request):
+    key = ""
+    if request.POST:
+        key = request.POST["key"]
+        try:
+            request.session.pop(key)
+        except:
+            pass
+    return render(request, "sessionremove.html", {"key":key})
 # <<<<<<------ QUIZ API TEST ------->>>>>>>
 
 def apitest(request):
