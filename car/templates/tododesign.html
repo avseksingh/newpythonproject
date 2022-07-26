@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Design</title>
+</head>
+<body>
+<h1> Sample Design: Design</h1>
+<form method = "get">
+<!--    {{data}}-->
+
+<table border="3">
+<tr><th> Task No</th><th> Task Name</th><th> Details</th><th> Status</th></tr>
+    {% for n in data %}
+<tr><td>{{n.id}}</td><th>{{n.taskname}}</th><th>{{n.details}}</th><th>{{n.status}}</th><td><a href="/todocreate"> <input type="button" name="edit" value="Edit"></td></a> <td><input type="button" name="delete" value="Delete"> </td></tr>
+    {% endfor %}
+</table>
+</form>
+</body>
+</html>

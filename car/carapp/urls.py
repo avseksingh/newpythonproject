@@ -3,7 +3,8 @@ from . import views
 
 urlpatterns = [
     path ('', views.home, name = 'home'),
-    path('', views.index, name='index'),
+    
+    #path('', views.index, name='index'),
     #     path('allbooks', views.allbooks, name='all'),
     path('searchbooks', views.searchbooks, name='search'),
     path('or', views.searchor, name='searchor'),
@@ -28,4 +29,19 @@ urlpatterns = [
     path ('validation', views.validation, name = "validation"),
     path ('result', views.result, name = "result"),
     path ('testresult', views.testresult, name = "testresult"),
+    path ('set', views.setcookies, name = "setcookies"),
+    path ('get', views.getcookies, name = "getcookies"),
+    path ('todohome', views.todohome),
+    path ('todocreate', views.todocreate),
+    path ('tododesign', views.tododesign),
+    path('weather', views.weather, name = "weather"),
+    path('weathercity', views.weathercity, name = "weathercity"),
+    path('quiztf', views.quiztf, name = "quiztf"),
+    path('tfquiz', views.tfquiz, name = "tfquiz"),
+    path('apitest', views.apitest, name = "apitest"),
+    path('sessionquiz', views.sessionquiz, name = "sessionquiz"),
+    path('setsession', views.setsession, name = "setsession"),
+    path('getsession', views.getsession, name = "getsession"),
+    path('removesession', views.removesession, name = "removesession")
+
 ]

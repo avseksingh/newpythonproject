@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz App True False</title>
+</head>
+<body>
+<form method = "GET">
+<!--    {% csrf_token %}-->
+    <input type = "hidden" value = "{{qno}}" name = "qno">
+    <h1> True False Quiz</h1>
+<!--    <h1>{{questions}}</h1>-->
+    <h2>{{qnumber}}</h2>
+    <h2>{{questions.question}}</h2>
+    {{question}}
+    <input name = "option" type = "submit" value = "True">
+    <input name = "option" type = "submit" value = "False">
+</form>
+<h1>{{result}}</h1>
+
+
+
+<div> <h1>Quiz App</h1></div>
+
+{{data.questions}}
+{{q1}}
+
+</body>
+</html>

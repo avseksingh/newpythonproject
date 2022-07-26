@@ -4,22 +4,256 @@ from django.db.models import Avg, Max
 from django.db.models.functions import Coalesce
 from django.db.models.functions import Lower
 from django.forms.models import model_to_dict
-
+from django.utils import  timezone
+import requests, json
 # from .forms import TestBookForm, TestBookFormOne
-from .models import BooksModel, TestBook, Result, Question
+from .models import BooksModel, TestBook, Result, Question, TodoList, CreateTodo, WeatherData
+import urllib.request as httprequest
+import json
+
+#  <<<<<<<<<------ weather API ------->>>>>>>>>>>
+
+import datetime as dt
+import json
+import datetime
+from datetime import datetime
+
+import requests
 
 
 # Create your views here.
 
+
+# <<<<<<------ QUIZ API TEST ------->>>>>>>
+
+def apitest(request):
+    qno = 0
+    qnumber = 0
+    result = []
+    # dresult = {}
+    option = ""
+    session = request.session
+    # result = dresult
+
+    response = requests.get('https://gist.githubusercontent.com/champaksworldcreate/320e5af5ea9dbd31597d220637885587/raw/99f8f7a4df34ae477dcceb62598aa0bdde9ef685/tfquestions.json')
+    data = response.json()
+    data = data.get("questions")
+    q = data[qno]['question']
+
+    if request.GET:
+        qno = int(request.GET['qno'])
+        option = request.GET['option']
+        qno += 1
+        result.append(option)
+        # dresult[qnumber] = option
+        qnumber = qno + 1
+        if qnumber > len(data):
+            print(session.get(qnumber))
+            return HttpResponse("Test End")
+        q = data[qno]['question']
+    session[qnumber] = result
+    return render(request, "apitest.html", {"data":q, "qnumber": qno + 1, "qno": qno, "result": result,  "session": request.session.items()})
+
+# <<<-------- Set, Get, & Remove session ------->>>>
+
+def setsession(request):
+    session= request.session
+    session["1"]="Shivam"
+    return HttpResponse(session.get("1"))
+
+def getsession(request):
+    session= request.session
+    data=session.get(str(1))
+    return HttpResponse(data)
+
+def removesession(request):
+    # session = request.session
+    del request.session["1"]
+    return HttpResponse("You are Logged out")
+
+# <<<<<------- Session Quiz ------>>>>>>
+def sessionquiz(request):
+    data = {"A":a, "B":b}
+    session = request.session
+    session[1] = "One"
+    return render(request, "sessionquiz.html", {"data":data})
+
+
+
+
+
+
+
+# <<<<<----- QUIZ 2 TRUE FLASE ------>>>>>>
+
+def tfquiz(request):
+    url = 'https://gist.githubusercontent.com/champaksworldcreate/320e5af5ea9dbd31597d220637885587/raw/99f8f7a4df34ae477dcceb62598aa0bdde9ef685/tfquestions.json'
+    resp = requests.get(url)
+    questions = json.loads(resp.text)
+    print(questions)
+
+    qno = 0
+    result = ""
+    if request.POST:
+        option = request.POST["option"]
+        givenanswer = True
+        if option == "False":
+            givenanswer = False
+        if givenanswer == questions["correctanswer"]:
+            result = "right"
+        else:
+            result = "wrong"
+        qno = int(request.POST["qno"])
+        qno += 1
+
+    if qno >= len(questions):
+        return Httpresponse("Test Over")
+
+
+    # question = questions[qno]
+    return render(request, "tfquiz.html", {"qno": qno, "qnumber": qno +1, "questions": questions, "result": result})
+
+
+
+# <<<<<----- QUIZ TRUE FLASE ------>>>>>>
+
+def quiztf(request):
+    url = 'https://gist.githubusercontent.com/champaksworldcreate/320e5af5ea9dbd31597d220637885587/raw/99f8f7a4df34ae477dcceb62598aa0bdde9ef685/tfquestions.json'
+    resp = requests.get(url)
+    data = json.loads(resp.text)
+    # q1 = data["questions"]["question"]
+    print(data)
+    return render(request, "quiztf.html", {"data": data})
+
+
+
+
+
+
+
+
+
+#<<<<---- weather API function -------->>>>>>>>
+def weathercity(request):
+
+    date_time_str = '2018-09-22 11:00:00'
+    print("Timezone.now()")
+    print (timezone.now())
+    date_time = datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S')
+    print("Date time")
+
+    print(date_time)
+    current_time = datetime.datetime.now().time()
+    print("current time")
+    print(current_time)
+
+    city="Enter"
+    temp = 0
+    feels_like = 0
+    temp_max = 0
+    temp_min = 0
+    humidity = 0
+    data = ""
+
+    if request.GET:
+        city = request.GET['city']
+        report = {}
+        print(dt.datetime.fromtimestamp(1624491535))
+        appid = "c9088325fd9ad3cbfac170d0a827ab54"
+        url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=4a1f8a61b74546825af1e0be106e797b&units=metric"
+        response = requests.get(url)
+        data=json.loads(response.text)
+        temp = data["main"]["temp"]
+        feels_like = data["main"]["feels_like"]
+        temp_min = data["main"]["temp_min"]
+        temp_max = data["main"]["temp_max"]
+        humidity = data["main"]["humidity"]
+        value = WeatherData(city = city, temp = temp, feels_like = feels_like, temp_min = temp_min, temp_max = temp_max, humidity = humidity)
+        value.save()
+
+    report = {
+        "city": city,
+        "temp": temp,
+        "feels_like": feels_like,
+        "temp_min" : temp_min,
+        "temp_max" : temp_max,
+        "humidity": humidity,
+    }
+
+    return render(request, "weathercity.html",{"data":data, "report": report})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def weather(request):
+    api_key = "c9088325fd9ad3cbfac170d0a827ab54"
+
+    # base_url variable to store url
+    base_url = "http://api.openweathermap.org/data/2.5/weather?"
+
+    # Give city name
+    city_name = "delhi"
+
+    # complete_url variable to store
+    # complete url address
+    complete_url = base_url + "appid=" + api_key + "&q=" + city_name
+
+    # get method of requests module
+    # return response object
+    response = requests.get(complete_url)
+    print (response)
+    data=json.loads(request.body)
+    return render(request, "weather.html", {"data": data})
+    # x = response.json()
+    # if x["cod"] != "404":
+    #     y = x["main"]
+    #     current_temperature = y["temp"]
+    #     current_pressure = y["pressure"]
+    #     current_humidity = y["humidity"]
+    #     z = x["weather"]
+    #     weather_description = z[0]["description"]
+
+
+
+
+
+    # data = {}
+    # if request.POST:
+    #     city = request.POST['city']
+    #     # source = urllib.request.urlopen('http://api.openweathermap.org/data/2.5/forecast/daily?lat={lat}&lon={lon}&cnt={cnt}&appid={c9088325fd9ad3cbfac170d0a827ab54}').read()
+    #     source = urllib.request.urlopen(
+    #         'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={c9088325fd9ad3cbfac170d0a827ab54}').read()
+    #     print (source)
+    #     list_of_data = json.loads(source)
+    #     data = {
+    #         "country_code": str(list_of_data['sys']['country']),
+    #         "coordinate": str(list_of_data['coord']['lat']),
+    #     }
+    #     print(city)
+    #     print(data)
+    # 
+    # return render(request, "weather.html", {"data": data})
+
+
 def home(request):
-    links = ["index", "home", "search", "searchor", "avg", "againsearch", "Searchbybook", "SearchbyInput",
+    links = ["home", "search", "searchor", "avg", "againsearch", "Searchbybook", "SearchbyInput",
              "Inputsearchbyprice", "Between", "allbooks", "base", "bootstrap", "header", "quiz", "quizpage", "session",
-             "validation"]
+             "validation", "quiztf", "tfquiz", "sessionquiz"]
     return render(request, "home.html", {'name': 'shivam', "links": links})
 
 
-def index(request):
-    return HttpResponse("You're at the Books index.")
+# def index(request):
+#     return HttpResponse("You're at the Books index.")
 
 
 def all(request):
@@ -276,7 +510,6 @@ def quizpage(request):
     testover = ""
     value = ""
 
-
     if request.GET:
         next = request.GET["next"]
         option = request.GET["option"]
@@ -290,7 +523,6 @@ def quizpage(request):
         data = Question.objects.get(id=queno)
 
         qr = QuizResponse(queno, data.question, data.answer, option)
-
 
         r = Result()
         r.questionno = queno
@@ -315,8 +547,6 @@ def quizpage(request):
         r.save()
         value = Result.objects.all()
 
-
-
     if ((testover == "over") | (queno == 5)):
         return render(request, "testresult.html", {"value": value})
     else:
@@ -324,5 +554,61 @@ def quizpage(request):
                       {"data": data, "questionno": queno, "maxno": maxno, "option": option, "userans": userans,
                        "session": session})
 
+
 def testresult(request):
     return render(request, "testresult.html", {"session": session})
+
+
+# <<<<< COOKIES  >>>>>>
+
+def setcookies(request):
+    response = render(request, 'setcookies.html')
+    response.set_cookie('name', 'abhi')
+    return response
+
+
+def getcookies(request):
+    name = request.COOKIES['name']
+    return render(request, "getcookies.html", {'name': name})
+
+
+def todohome(request):
+    return render(request, "todohome.html")
+
+
+def todocreate(request):
+    # <<<--- Create refernce by Home ----->>>
+
+    # create = ''
+    # if request.GET:
+    #     create = request.GET['create']
+    # if create == "create":
+
+    edit = ''
+    toedit = ''
+    value = ''
+    if request.GET:
+        toedit = request.GET['edit']
+
+    if toedit == "edit":
+        pass
+    edit = TodoList.objects.filter(id=5)
+
+    # cr = TodoList(edit.id, edit.taskname, edit.details, edit.status)
+    # r = CreateTodo()
+    # r.taskno = edit.id
+    # r.taskname = edit.taskname
+    # r.details = edit.details
+    # r.status = edit.status
+    # r.save()
+    # value = TodoList.objects.all()
+
+    print(edit)
+    return render(request, "todocreate.html", {"edit": edit, "value": value})
+
+
+def tododesign(request):
+    data = ''
+    data = TodoList.objects.all()
+    print(data)
+    return render(request, "tododesign.html", {"data": data})

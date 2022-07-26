@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz App True False</title>
+    {% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<form method = "GET">
+
+{{result}}
+{{dresult}}
+    {{session.key}}
+    {{session.value}}
+    {{session}}
+    <input type="hidden" id="qno" name="qno" value={{qno}}>
+<div class="container mt-sm-5 my-1">
+    <div class="question ml-sm-5 pl-sm-5 pt-2">
+        <div class="py-2 h5"><b>Q.{{qnumber}} {{data}}</b></div>
+        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+            <label class="options">True
+                <input type="radio" name="option" value="true">
+                <span class="checkmark"></span>
+            </label>
+            <label class="options">False
+                <input type="radio" name="option" value="false">
+                <span class="checkmark" ></span>
+            </label>
+<!--            <label class="options">Journalist or Activist-->
+<!--                <input type="radio" name="radio">-->
+<!--                <span class="checkmark"></span>-->
+<!--            </label>-->
+<!--            <label class="options">Other-->
+<!--                <input type="radio" name="radio">-->
+<!--                <span class="checkmark"></span>-->
+<!--            </label>-->
+        </div>
+    </div>
+<!--    <div class="ml-auto mr-sm-5">-->
+<!--        <div id="prev">-->
+<!--            <button class="btn btn-primary">Previous</button>-->
+<!--        </div>-->
+        <div class="ml-auto mr-sm-5">
+<!--            <button class="btn btn-success">Next</button>-->
+
+            <input type="submit" class = "btn btn-success" name = "pre" value = "Previous" >
+            <input type="submit" class = "btn btn-success" name = "next" value = "Next" >
+        </div>
+    </div>
+</div>
+</form>
+</body>
+</html>
