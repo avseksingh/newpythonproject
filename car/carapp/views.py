@@ -20,7 +20,6 @@ from datetime import datetime
 
 import requests
 
-
 # Create your views here.
 
 # <<<<---- Session Test Advance ------>>>>>
@@ -48,6 +47,7 @@ def sessionremove(request):
         except:
             pass
     return render(request, "sessionremove.html", {"key":key})
+
 # <<<<<<------ QUIZ API TEST ------->>>>>>>
 
 def apitest(request):
@@ -58,7 +58,6 @@ def apitest(request):
     option = ""
     session = request.session
     # result = dresult
-
     response = requests.get('https://gist.githubusercontent.com/champaksworldcreate/320e5af5ea9dbd31597d220637885587/raw/99f8f7a4df34ae477dcceb62598aa0bdde9ef685/tfquestions.json')
     data = response.json()
     data = data.get("questions")
@@ -67,16 +66,17 @@ def apitest(request):
     if request.GET:
         qno = int(request.GET['qno'])
         option = request.GET['option']
+        session[qno] = option
         qno += 1
         result.append(option)
         # dresult[qnumber] = option
         qnumber = qno + 1
         if qnumber > len(data):
-            print(session.get(qnumber))
-            return HttpResponse("Test End")
+            # print(session.get(qnumber))
+            return render(request, "apiresult.html", {"data": data, "session": request.session.items()})
         q = data[qno]['question']
-    session[qnumber] = result
-    return render(request, "apitest.html", {"data":q, "qnumber": qno + 1, "qno": qno, "result": result,  "session": request.session.items()})
+    # session[qnumber] = result
+    return render(request, "apitest.html", {"data":q, "qnumber": qno + 1, "qno": qno, "result": result, "session": request.session.items()})
 
 # <<<-------- Set, Get, & Remove session ------->>>>
 
@@ -97,16 +97,10 @@ def removesession(request):
 
 # <<<<<------- Session Quiz ------>>>>>>
 def sessionquiz(request):
-    data = {"A":a, "B":b}
+    data = { "A" :a, "B" :b }
     session = request.session
     session[1] = "One"
     return render(request, "sessionquiz.html", {"data":data})
-
-
-
-
-
-
 
 # <<<<<----- QUIZ 2 TRUE FLASE ------>>>>>>
 
@@ -138,7 +132,6 @@ def tfquiz(request):
     return render(request, "tfquiz.html", {"qno": qno, "qnumber": qno +1, "questions": questions, "result": result})
 
 
-
 # <<<<<----- QUIZ TRUE FLASE ------>>>>>>
 
 def quiztf(request):
@@ -148,14 +141,6 @@ def quiztf(request):
     # q1 = data["questions"]["question"]
     print(data)
     return render(request, "quiztf.html", {"data": data})
-
-
-
-
-
-
-
-
 
 #<<<<---- weather API function -------->>>>>>>>
 def weathercity(request):
